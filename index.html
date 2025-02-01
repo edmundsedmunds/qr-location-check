@@ -3,36 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPS Form Redirect</title>
+    <title>GPS QR skenēšana</title>
     <script>
-        function getLocationAndRedirect() {
+        function submitLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, error);
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+
+                    // ✅ **Automātiski novirza uz Google Forms ar reālo GPS koordinātu ievadi**
+                    let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfoCCAeJs8sD_F3xoMuLbQi6Lz_jXBuWwNX_WZ3JNWEDJWH8g/viewform?usp=pp_url&entry.559881896=";
+                    let fullURL = formURL + "Latitude:+" + lat + "+%7C+Longitude:+" + lon;
+
+                    window.location.href = fullURL;
+                }, function(error) {
+                    alert("GPS piekļuve bloķēta vai kļūda: " + error.message);
+                });
             } else {
-                document.body.innerHTML = "<h2>⚠️ Jūsu pārlūkprogramma neatbalsta GPS!</h2>";
+                alert("Jūsu ierīce neatbalsta GPS");
             }
-        }
-
-        function success(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            console.log("Latitude: " + lat + ", Longitude: " + lng);
-
-            // Google Forms URL ar iepriekš aizpildītu lauku (AIZSTĀJ AR SAVU FORMAS ID)
-            var formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfoCCAeJs8sD_F3xoMuLbQi6Lz_jXBuWwNX_WZ3JNWEDJWH8g/viewform?usp=pp_url";
-            var fieldId = "entry.559881896"; // Aizvieto ar savas formas GPS lauka ID
-            var redirectUrl = formUrl + "&" + fieldId + "=Latitude:" + lat + "%7CLongitude:" + lng;
-
-            // Pāradresē uz Google Forms ar aizpildītiem datiem
-            window.location.href = redirectUrl;
-        }
-
-        function error() {
-            document.body.innerHTML = "<h2>❌ Neizdevās iegūt GPS datus. Pārliecinieties, ka GPS ir ieslēgts!</h2>";
         }
     </script>
 </head>
-<body onload="getLocationAndRedirect()">
-    <h2>⏳ Apstrādā GPS datus...</h2>
+<body onload="submitLocation()">
+    <h1>GPS datu iegūšana...</h1>
 </body>
 </html>
