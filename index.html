@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS QR skenēšana</title>
+    <script>
+        function submitLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+
+                    // ✅ **Automātiski novirza uz Google Forms ar reālo GPS koordinātu ievadi**
+                    let formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfoCCAeJs8sD_F3xoMuLbQi6Lz_jXBuWwNX_WZ3JNWEDJWH8g/viewform?usp=pp_url&entry.559881896=";
+                    let fullURL = formURL + "Latitude:+" + lat + "+%7C+Longitude:+" + lon;
+
+                    window.location.href = fullURL;
+                }, function(error) {
+                    alert("GPS piekļuve bloķēta vai kļūda: " + error.message);
+                });
+            } else {
+                alert("Jūsu ierīce neatbalsta GPS");
+            }
+        }
+    </script>
+</head>
+<body onload="submitLocation()">
+    <h1>GPS datu iegūšana...</h1>
+</body>
+</html>
